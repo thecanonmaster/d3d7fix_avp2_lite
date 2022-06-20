@@ -197,8 +197,8 @@ extern CClientMgrBase* g_pClientMgr;
 DWORD GetConfigValue(eConfigOption eOption);
 void SetConfigValue(eConfigOption eOption, DWORD dwSet);
 
-void EngineHack_WriteData(HANDLE hProcess, LPVOID lpAddr, BYTE* pNew, BYTE* pOld, DWORD dwSize);
-void EngineHack_WriteFunction(HANDLE hProcess, LPVOID lpAddr, DWORD dwNew, DWORD& dwOld);
-void EngineHack_WriteCall(HANDLE hProcess, LPVOID lpAddr, DWORD dwNew, BOOL bStructCall);
-void EngineHack_AllowWrite(HANDLE hProcess, LPVOID lpAddr, DWORD dwSize);
-void EngineHack_WriteJump(HANDLE hProcess, LPVOID lpAddr, DWORD dwNew);
+void EngineHack_WriteData(LPVOID lpAddr, BYTE* pNew, BYTE* pOld, DWORD dwSize);
+void EngineHack_WriteFunction(LPVOID lpAddr, DWORD dwNew, DWORD& dwOld);
+void EngineHack_WriteCall(LPVOID lpAddr, DWORD dwNew, BOOL bStructCall);
+void EngineHack_AllowWrite(LPVOID lpAddr, DWORD dwSize);
+void EngineHack_WriteJump(LPVOID lpAddr, DWORD dwNew);

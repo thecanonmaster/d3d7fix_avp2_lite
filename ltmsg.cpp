@@ -81,10 +81,9 @@ void HookEngineStuff1()
 	}
 	
 	DWORD dwRead;
-	HANDLE hProcess = GetCurrentProcess();
 	DWORD dwExeAddress = (DWORD)GetModuleHandle(LITHTECH_EXE);
 	
-	EngineHack_WriteFunction(hProcess, (LPVOID)(dwExeAddress + ADDR_LOAD_LIBRARY), (DWORD)MyLoadLibraryA, dwRead); // 0x0C6100
+	EngineHack_WriteFunction((LPVOID)(dwExeAddress + ADDR_LOAD_LIBRARY), (DWORD)MyLoadLibraryA, dwRead); // 0x0C6100
 
 #ifdef PRIMAL_HUNT_BUILD
 	memcpy(g_anLoadRenderLibCode1, (LPVOID)(dwExeAddress + ADDR_LOAD_RENDER_LIB_CODE1), 6); // 0x38219
@@ -136,20 +135,18 @@ HMODULE WINAPI MyLoadLibraryA(LPCSTR lpFileName)
 	
 	if (_stricmp(lpFileName, g_szRenderWrapperDll) == 0)
 	{ 
-		HANDLE hProcess = GetCurrentProcess();
 		DWORD dwDllAddress = (DWORD)GetModuleHandle(g_szRenderDll);
 		
-		EngineHack_WriteFunction(hProcess, (LPVOID)(dwDllAddress + ADDR_D3D_DDRAW_CREATE_EX), (DWORD)FakeDirectDrawCreateEx, g_dwOriginalD3D); // 0x46000
+		EngineHack_WriteFunction((LPVOID)(dwDllAddress + ADDR_D3D_DDRAW_CREATE_EX), (DWORD)FakeDirectDrawCreateEx, g_dwOriginalD3D); // 0x46000
 	}
 #ifdef PRIMAL_HUNT_BUILD
 	else if (strstr(lpFileName, CRES_DLL_LOWER) || strstr(lpFileName, CRES_DLL_UPPER))
 	{
 		BYTE anOld[6];
-		HANDLE hProcess = GetCurrentProcess();
 		DWORD dwExeAddress = (DWORD)GetModuleHandle(LITHTECH_EXE);
 
-		EngineHack_WriteData(hProcess, (LPVOID)(dwExeAddress + ADDR_LOAD_RENDER_LIB_CODE1), g_anLoadRenderLibCode1, anOld, 6);
-		EngineHack_WriteData(hProcess, (LPVOID)(dwExeAddress + ADDR_LOAD_RENDER_LIB_CODE2), g_anLoadRenderLibCode2, anOld, 6);
+		EngineHack_WriteData((LPVOID)(dwExeAddress + ADDR_LOAD_RENDER_LIB_CODE1), g_anLoadRenderLibCode1, anOld, 6);
+		EngineHack_WriteData((LPVOID)(dwExeAddress + ADDR_LOAD_RENDER_LIB_CODE2), g_anLoadRenderLibCode2, anOld, 6);
 	}
 #endif
 
