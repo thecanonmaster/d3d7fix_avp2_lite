@@ -3,13 +3,17 @@ extern LPDIRECTDRAW7 g_ddMainDDraw;
 static char g_szRenderDll[64] = "d3d.ren";
 static char g_szRenderWrapperDll[64] = "d3d.ren";
 extern char g_szConfigBytes[64];
+extern HWND g_hWindowHandle;
+extern BOOL g_bWindowHooked;
 
 enum eConfigOption
 {
+	CO_MIN = 0,
 	CO_INTEL_HD = 1,
-	CO_RADEON_5700 = 2, 
+	CO_RADEON_5700, 
 	CO_NOBF_LIGHTS,
 	CO_DGVOODOO_MODE,
+	CO_COOP_MOD_COMPAT,
 	CO_MAX
 };
 
@@ -20,6 +24,9 @@ enum eConfigOption
 
 #define FIX_FLG_R5700_FLICKERING_MODELS		(1<<0)
 #define FIX_FLG_R5700_BLACK_SCREEEN			(1<<1)
+
+#define FIX_COOP_COMPAT_RMI_HOOKS		(1<<0)
+#define FIX_COOP_COMPAT_WINDOW_PROC		(1<<1)
 
 #define FLIPSCREEN_CANDRAWCONSOLE	(1<<0)
 #define FLIPSCREEN_COPY				(1<<1)
@@ -202,3 +209,5 @@ void EngineHack_WriteFunction(LPVOID lpAddr, DWORD dwNew, DWORD& dwOld);
 void EngineHack_WriteCall(LPVOID lpAddr, DWORD dwNew, BOOL bStructCall);
 void EngineHack_AllowWrite(LPVOID lpAddr, DWORD dwSize);
 void EngineHack_WriteJump(LPVOID lpAddr, DWORD dwNew);
+
+void logf(char *msg, ...);

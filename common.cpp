@@ -3,9 +3,11 @@
 LPDIRECTDRAW7 g_ddMainDDraw = NULL;
 ILTClient* g_pLTClient = NULL;
 CClientMgrBase* g_pClientMgr = NULL;
+HWND g_hWindowHandle = NULL;
+BOOL g_bWindowHooked = FALSE;
 
-char* g_szConfigBytesCols = "INTEL_HD|RADEON|NO_BF_LIGHTS|DG_VOODOO";
-char g_szConfigBytes[64] = "X0310X";
+char* g_szConfigBytesCols = "INTEL_HD|RADEON|NO_BF_LIGHTS|DG_VOODOO|COOP_MOD_COMPAT";
+char g_szConfigBytes[64] = "X00110X";
 
 DWORD GetConfigValue(eConfigOption eOption)
 {
@@ -89,4 +91,19 @@ void EngineHack_WriteJump(LPVOID lpAddr, DWORD dwNew)
 	pCodeContent[0] = dwCallCode;
 	
 	VirtualProtect(lpAddr, 5, dwOldProtect, &dwTemp);
+}
+
+void logf(char *msg, ...)
+{	
+	FILE* pLogFile = fopen("ltmsg.log", "a");
+
+	va_list argp;
+	
+	va_start(argp, msg);
+	vfprintf(pLogFile, msg, argp);	
+	va_end(argp);
+	
+	fflush(pLogFile);
+
+	fclose(pLogFile);
 }

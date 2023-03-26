@@ -58,8 +58,8 @@ LINK32=link.exe
 InputPath=.\Release\ltmsg.dll
 SOURCE="$(InputPath)"
 
-"E:\Games\AVP2\ltmsg.dll" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) "E:\Games\AVP2\ltmsg.dll"
+"C:\Games\AVP2\ltmsg.dll" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) "C:\Games\AVP2\ltmsg.dll"
 
 # End Custom Build
 
@@ -92,8 +92,8 @@ LINK32=link.exe
 InputPath=.\Debug\ltmsg.dll
 SOURCE="$(InputPath)"
 
-"E:\Games\AVP2\ltmsg.dll" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) "E:\Games\AVP2\ltmsg.dll"
+"C:\Games\AVP2\ltmsg.dll" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) "C:\Games\AVP2\ltmsg.dll"
 
 # End Custom Build
 

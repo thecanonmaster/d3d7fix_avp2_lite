@@ -105,6 +105,15 @@ HRESULT __stdcall FakeIDDrawSurface7PR_Flip(LPDIRECTDRAWSURFACE7 c,LPDIRECTDRAWS
 	return g_pOrigPRFlip(c, a, b);
 }
 
+typedef LRESULT CALLBACK WindowProc_type(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+typedef WindowProc_type *WindowProc_type_ptr;
+WindowProc_type_ptr OldWindowProc;
+
+LRESULT CALLBACK NewWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	return OldWindowProc(hwnd, uMsg, wParam, lParam);
+}
+
 FakeIDDraw7::FakeIDDraw7(LPDIRECTDRAW7 pOriginal)
 {
 	m_pIDDraw = pOriginal;
@@ -294,6 +303,17 @@ HRESULT  __stdcall FakeIDDraw7::RestoreDisplayMode(void)
 
 HRESULT  __stdcall FakeIDDraw7::SetCooperativeLevel(HWND hWnd, DWORD dwFlags)
 {
+	if ((GetConfigValue(CO_COOP_MOD_COMPAT) & FIX_COOP_COMPAT_WINDOW_PROC) && !g_bWindowHooked)
+	{
+		g_hWindowHandle = hWnd;
+
+		LONG lResult = SetWindowLong(g_hWindowHandle, GWL_WNDPROC, (LONG)NewWindowProc);
+		if (lResult)
+			OldWindowProc = (WindowProc_type_ptr)lResult;
+		
+		g_bWindowHooked = TRUE;
+	}
+	
 	return m_pIDDraw->SetCooperativeLevel(hWnd, dwFlags);
 }
 

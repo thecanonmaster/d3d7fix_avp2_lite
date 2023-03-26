@@ -58,6 +58,27 @@ void ApplyIntelHD_RHW_Fix()
 	pVert[3].rhw = fIntelHDFix;
 }
 
+void (*OldGetAxisOffsets)(float *offsets);
+void MyGetAxisOffsets(float *offsets)
+{
+	OldGetAxisOffsets(offsets);
+}
+
+void (*OldRunConsoleString)(char *pString);
+void MyRunConsoleString(char *pString)
+{
+	OldRunConsoleString(pString);
+}
+
+void ApplyCoopModCompat_Fix()
+{	
+	OldGetAxisOffsets = g_pLTClient->GetAxisOffsets;
+	g_pLTClient->GetAxisOffsets = MyGetAxisOffsets;
+
+	OldRunConsoleString = g_pLTClient->RunConsoleString;
+	g_pLTClient->RunConsoleString = MyRunConsoleString;
+}
+
 DWORD (*OldCreateObject)(ObjectCreateStruct *pStruct);
 DWORD MyCreateObject(ObjectCreateStruct *pStruct)
 {
@@ -117,6 +138,15 @@ HRESULT WINAPI FakeDirectDrawCreateEx(GUID FAR * lpGUID, LPVOID *lplpDD, REFIID 
 	
 	if (GetConfigValue(CO_INTEL_HD))
 		ApplyIntelHD_RHW_Fix();
+
+	DWORD dwCoopCompat = GetConfigValue(CO_COOP_MOD_COMPAT);
+	if (dwCoopCompat & FIX_COOP_COMPAT_RMI_HOOKS)
+	{
+		dwCoopCompat &= ~FIX_COOP_COMPAT_RMI_HOOKS;
+
+		SetConfigValue(CO_COOP_MOD_COMPAT, dwCoopCompat);
+		ApplyCoopModCompat_Fix();
+	}
 
 	DirectDrawCreateEx_Type DirectDrawCreateEx_fn = (DirectDrawCreateEx_Type)g_dwOriginalD3D;
 
